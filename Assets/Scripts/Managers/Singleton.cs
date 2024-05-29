@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
@@ -17,7 +18,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 // 생성된 오브젝트 자체가 없는 경우
                 if (instance == null)
                 {
-                    GameObject singletonObject = new GameObject(nameof(instance));
+                    GameObject singletonObject = new GameObject(typeof(T).ToString());
                     instance = singletonObject.AddComponent<T>();
                 }
             }

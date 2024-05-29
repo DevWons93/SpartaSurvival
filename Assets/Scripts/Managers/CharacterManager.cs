@@ -14,14 +14,15 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void Awake()
     {
-        if (Instance == null)
+        if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(this);
         }
         else
         {
-            Destroy(Instance);
+            if (instance == this)
+                Destroy(Instance);
         }        
     }
 }
