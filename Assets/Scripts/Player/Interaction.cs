@@ -31,9 +31,10 @@ public class Interaction : MonoBehaviour
             lastCheckTime = Time.time;
 
             Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+            Vector3 rayStart = transform.position - ray.origin;
             RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, maxCheckDistance, layerMask))
+            Debug.DrawRay(transform.position, ray.direction.normalized * maxCheckDistance, Color.red);
+            if (Physics.Raycast(transform.position + Vector3.up * 1.2f, ray.direction.normalized, out hit, maxCheckDistance, layerMask))
             {
                 if (hit.collider.gameObject != curInteractGameObject)
                 {

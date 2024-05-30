@@ -1,9 +1,11 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,6 +19,7 @@ public class PlayerController : MonoBehaviour
    
     [Header("Look")]
     public Transform cameraContainer;
+    public CinemachineVirtualCamera backViewCam;
     public float minXLook;
     public float maxXLook;
     private float camCurXRot;
@@ -150,6 +153,19 @@ public class PlayerController : MonoBehaviour
             case EBuffType.INVINCIBILITY:
                 CharacterManager.Instance.Player.condition.CanInvincibility(false);
                 break;
+        }
+    }
+
+    public void OnZoom(InputAction.CallbackContext context)
+    {
+        float delta = context.ReadValue<Vector2>().y;
+        if (delta > 0)
+        {
+            backViewCam.Priority = 9;
+        }
+        else if(delta < 0)
+        {
+            backViewCam.Priority = 11;
         }
     }
 }
