@@ -221,6 +221,7 @@ public class UIInventory : MonoBehaviour
             {
                 controller.Invincibility(selectedItem.duration);
             }
+            RemoveSelectedItem();
         }
     }
 

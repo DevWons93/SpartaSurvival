@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JumpPad : MonoBehaviour
+public class JumpPad : Pad
 {
     [SerializeField] private float jumpPower;
-    [SerializeField] private LayerMask interactLayer;
+    
     private void OnTriggerEnter(Collider other)
     {
         if ((1 << other.gameObject.layer & interactLayer) > 0)
