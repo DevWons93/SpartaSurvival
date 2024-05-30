@@ -187,7 +187,7 @@ public class UIInventory : MonoBehaviour
             selectedStatValue.text += selectedItem.consumables[i].value.ToString() + "\n";
         }
 
-        useButton.SetActive(selectedItem.type == EItemType.CONSUMABLE);
+        useButton.SetActive(selectedItem.type == EItemType.CONSUMABLE || selectedItem.type == EItemType.BUFFABLE);
         equipButton.SetActive(selectedItem.type == EItemType.EQUIPABLE && !slots[index].equipped);
         unequipButton.SetActive(selectedItem.type == EItemType.EQUIPABLE && slots[index].equipped);
         dropButton.SetActive(true);
@@ -210,6 +210,17 @@ public class UIInventory : MonoBehaviour
                 }
             }
             RemoveSelectedItem();
+        }
+        else if(selectedItem.type == EItemType.BUFFABLE)
+        {
+            if((selectedItem.buffType & EBuffType.BOOST) > 0)
+            {
+                controller.Boost(selectedItem.duration);
+            }
+            else if((selectedItem.buffType & EBuffType.INVINCIBILITY) > 0)
+            {
+                controller.Invincibility(selectedItem.duration);
+            }
         }
     }
 

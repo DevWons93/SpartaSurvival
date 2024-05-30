@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     public float jumpPower;
     private Vector2 curMovementInput;
     public LayerMask groundLayerMask;
-
+   
     [Header("Look")]
     public Transform cameraContainer;
     public float minXLook;
@@ -116,5 +116,40 @@ public class PlayerController : MonoBehaviour
         bool toggle = Cursor.lockState == CursorLockMode.Locked;
         Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
         canLook = !toggle;
+    }
+
+    public void Boost(float duration)
+    {
+        StartCoroutine(BuffActiveCoroutine(EBuffType.BOOST, duration));
+    }   
+
+    public void Invincibility(float duration)
+    {
+        StartCoroutine(BuffActiveCoroutine(EBuffType.INVINCIBILITY, duration));
+    }
+
+    private IEnumerator BuffActiveCoroutine(EBuffType buffType, float duration)
+    {
+        switch (buffType)
+        {
+            case EBuffType.BOOST:
+                moveSpeed *= 1.5f;
+                break;
+            case EBuffType.INVINCIBILITY:
+                CharacterManager.Instance.Player.condition.CanInvincibility(true);
+                break;
+        }
+
+        yield return new WaitForSecondsRealtime(duration);
+        
+        switch (buffType)
+        {
+            case EBuffType.BOOST:
+                moveSpeed /= 1.5f;
+                break;
+            case EBuffType.INVINCIBILITY:
+                CharacterManager.Instance.Player.condition.CanInvincibility(false);
+                break;
+        }
     }
 }

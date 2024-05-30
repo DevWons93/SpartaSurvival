@@ -13,6 +13,7 @@ public class PlayerCondition : MonoBehaviour
     //Condition mana { get { return uiCondition.mana; } }
 
     public float noHungerHealthDecay;
+    private bool isInvincibility;
 
     public event Action onTakenDamage;
 
@@ -22,7 +23,7 @@ public class PlayerCondition : MonoBehaviour
         hunger.Subtract(hunger.passiveValue * Time.deltaTime);
         stamina.Add(stamina.passiveValue * Time.deltaTime);
 
-        if (hunger.curValue == 0f)
+        if (hunger.curValue == 0f && !isInvincibility)
         {
             health.Subtract(noHungerHealthDecay * Time.deltaTime);
         }
@@ -50,6 +51,7 @@ public class PlayerCondition : MonoBehaviour
 
     public void TakePhysicalDamage(int damage)
     {
+        if (isInvincibility) return;
         health.Subtract(damage);
         onTakenDamage?.Invoke();
     }
@@ -63,5 +65,10 @@ public class PlayerCondition : MonoBehaviour
 
         stamina.Subtract(amount);
         return true;
+    }
+
+    public void CanInvincibility(bool isActive)
+    {
+        isInvincibility = isActive;
     }
 }

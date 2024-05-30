@@ -20,4 +20,8 @@ public class ItemData : ScriptableObject
 
     [Header("Equip")]
     public GameObject equipPrefab;
+
+    [Header("Buffable")]
+    public EBuffType buffType;
+    public float duration;
 }
