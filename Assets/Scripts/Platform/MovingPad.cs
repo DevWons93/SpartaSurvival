@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MovingPad : Pad
@@ -8,15 +9,17 @@ public class MovingPad : Pad
     [SerializeField] private List<MovingPoint> mpList;
     private Queue<MovingPoint> moveQueue;
 
-    private Rigidbody rigidbody;
+    private BoxCollider collider;
     
     private Vector3 destinationPos;
     private Vector3 direction;
+    private bool isPlayerOnPad;
+    private Transform child;
     
     
     private void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        collider = GetComponent<BoxCollider>();
         
         moveQueue = new Queue<MovingPoint>();
         foreach(MovingPoint mp in mpList)
@@ -28,8 +31,9 @@ public class MovingPad : Pad
     }
 
     private void Update()
-    {        
-        if(transform.position == destinationPos)
+    {
+        CheckPlayerOnPad();
+        if (transform.position == destinationPos)
         {
             UpdateNextDestination();
         }
@@ -42,5 +46,25 @@ public class MovingPad : Pad
         destinationPos = mp.nextPos;
         direction = (mp.nextPos - mp.startPos).normalized;
         moveQueue.Enqueue(mp);
+    }
+
+    private bool CheckPlayerOnPad()
+    {
+        float size = collider.bounds.size.x;
+        RaycastHit hit;
+        if (Physics.BoxCast(transform.position, new Vector3(size / 2, 0f, size / 2), Vector3.up, out hit, Quaternion.identity, 5f, LayerMask.GetMask("Player")))
+        {
+            if(!isPlayerOnPad)
+            {
+                isPlayerOnPad = true;
+                child = hit.collider.gameObject.transform;
+                child.SetParent(transform);
+            }            
+            return true;
+        }
+
+        if (isPlayerOnPad) child.transform.SetParent(null);
+        isPlayerOnPad = false;
+        return false;
     }
 }
